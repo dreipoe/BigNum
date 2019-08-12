@@ -2,7 +2,7 @@
 
 namespace BigNum
 {
-    public struct BigInt
+    public struct BigInt : IComparable<BigInt>
     {
         const byte N = 4;
         uint[] words;
@@ -80,56 +80,32 @@ namespace BigNum
 
         public static bool operator >(BigInt a, BigInt b)
         {
-            for (int i = 0; i < N; i++)
-            {
-                if (a.words[i] > b.words[i])
-                {
-                    return true;
-                }
-                else if (a.words[i] < b.words[i])
-                {
-                    return false;
-                }
-            }
-
-            return false;
+            return (a.CompareTo(b) > 0);
         }
 
         public static bool operator <(BigInt a, BigInt b)
         {
-            for (int i = 0; i < N; i++)
-            {
-                if (a.words[i] < b.words[i])
-                {
-                    return true;
-                }
-                else if (a.words[i] > b.words[i])
-                {
-                    return false;
-                }
-            }
-
-            return false;
+            return (a.CompareTo(b) < 0);
         }
 
         public static bool operator >=(BigInt a, BigInt b)
         {
-            return !(a < b);
+            return (a.CompareTo(b) >= 0);
         }
 
         public static bool operator <=(BigInt a, BigInt b)
         {
-            return !(a > b);
+            return (a.CompareTo(b) <= 0);
         }
 
         public static bool operator ==(BigInt a, BigInt b)
         {
-            return a.words == b.words;
+            return (a.CompareTo(b) == 0);
         }
 
         public static bool operator !=(BigInt a, BigInt b)
         {
-            return a.words != b.words;
+            return (a.CompareTo(b) != 0);
         }
 
         #endregion
@@ -147,6 +123,17 @@ namespace BigNum
         public override string ToString()
         {
             throw new NotImplementedException();
+        }
+
+        public int CompareTo(BigInt other)
+        {
+            for (int i = 0; i < N; i++)
+                if (words[i] < other.words[i])
+                    return -1;
+                else if (words[i] > other.words[i])
+                    return 1;
+
+            return 0;
         }
     }
 }
